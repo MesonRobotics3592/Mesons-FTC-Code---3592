@@ -30,6 +30,8 @@ public class Blue_Short_State_Auto extends OpMode {
     }
 
     public void start() {
+        drive(5);
+
     }
 
     public void loop(){

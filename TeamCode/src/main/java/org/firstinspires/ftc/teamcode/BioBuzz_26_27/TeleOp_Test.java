@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode.BioBuzz_26_27;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.*;
 
 
 @TeleOp//(name="TeleOp_Test", group="Iterative Opmode")
@@ -17,6 +17,9 @@ public class TeleOp_Test extends OpMode {
     private DcMotor front_left = null;
     private DcMotor front_right = null;
     private DcMotor back_left = null;
+    private DcMotor intake = null;
+    private DcMotor launcher = null;
+    private Servo gate = null;
     private double speedMod = 1;
 
     @Override
@@ -26,6 +29,9 @@ public class TeleOp_Test extends OpMode {
         front_right  = hardwareMap.get(DcMotor.class, "front_right");
         back_left    = hardwareMap.get(DcMotor.class, "back_left");
         back_right   = hardwareMap.get(DcMotor.class, "back_right");
+        intake       = hardwareMap.get(DcMotor.class, "intake");
+        launcher     = hardwareMap.get(DcMotor.class, "launcher");
+        gate = hardwareMap.get(Servo.class, "channel_gate");
     }
 
     @Override
