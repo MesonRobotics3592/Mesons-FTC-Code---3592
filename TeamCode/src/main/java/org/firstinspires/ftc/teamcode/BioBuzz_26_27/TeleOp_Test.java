@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 
 
-@TeleOp//(name="TeleOp_Test", group="Iterative Opmode")
+@TeleOp
 //@Disabled
 //Include @Disabled or comment out the OpMode to remove the program from the Driver Hub.
 
@@ -21,34 +21,38 @@ public class TeleOp_Test extends OpMode {
     private DcMotor launcher = null;
     private Servo gate = null;
     private double speedMod = 1;
+    private int launcherCheck = 0;
+    private int intakeCheck = 0;
+    private int launcherState = 0;
+
 
     @Override
 
     public void init() {
-        front_left   = hardwareMap.get(DcMotor.class, "front_left");
-        front_right  = hardwareMap.get(DcMotor.class, "front_right");
-        back_left    = hardwareMap.get(DcMotor.class, "back_left");
-        back_right   = hardwareMap.get(DcMotor.class, "back_right");
-        intake       = hardwareMap.get(DcMotor.class, "intake");
-        launcher     = hardwareMap.get(DcMotor.class, "launcher");
+        front_left = hardwareMap.get(DcMotor.class, "front_left");
+        front_right = hardwareMap.get(DcMotor.class, "front_right");
+        back_left = hardwareMap.get(DcMotor.class, "back_left");
+        back_right = hardwareMap.get(DcMotor.class, "back_right");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
     }
 
     @Override
 
-    public void loop(){
-        double drive  = -1*gamepad1.left_stick_y;
+    public void loop() {
+        double drive = -1 * gamepad1.left_stick_y;
         double strafe = gamepad1.right_stick_x;
-        double twist  = gamepad1.left_stick_x;
+        double twist = gamepad1.left_stick_x;
         double[] speeds = {
-                -1*(-drive + strafe - twist)*speedMod,
-                -(drive + strafe - twist)*speedMod,
-                (drive - strafe - twist)*speedMod,
-                (-drive - strafe - twist)*speedMod
+                -1 * (-drive + strafe - twist) * speedMod,
+                -(drive + strafe - twist) * speedMod,
+                (drive - strafe - twist) * speedMod,
+                (-drive - strafe - twist) * speedMod
         };
         double max = Math.abs(speeds[0]);
-        for(int i = 0; i < speeds.length; i++) {
-            if ( max < Math.abs(speeds[i]) ) max = Math.abs(speeds[i]);
+        for (int i = 0; i < speeds.length; i++) {
+            if (max < Math.abs(speeds[i])) max = Math.abs(speeds[i]);
         }
         if (max > 1) {
             for (int i = 0; i < speeds.length; i++) speeds[i] /= max;
@@ -65,6 +69,33 @@ public class TeleOp_Test extends OpMode {
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcherTick();
+        intakeTick();
 
+    }
+
+    public void launcherTick() {
+        if (gamepad1.right_trigger_pressed) {
+            if (launcherCheck == 0) {
+                if (launcherState == 0) {
+                    launcher.setPower(1);
+                    launcherState = 1;
+                } else if (launcherState == 1) {
+                    launcher.setPower(0);
+                    launcherState = 0;
+                } else {
+                    launcherCheck = 0;
+                }
+            }
+        }
+    }
+    public void intakeTick() {
+        if (gamepad1.left_trigger > 0.1 && intakeCheck == 0) {
+            intakeCheck = 1;
+            intake.setPower(1);
+        } else if (gamepad1.left_trigger > 0.1 && intakeCheck == 1) {
+            intakeCheck = 0;
+            intake.setPower(0);
+        }
     }
 }

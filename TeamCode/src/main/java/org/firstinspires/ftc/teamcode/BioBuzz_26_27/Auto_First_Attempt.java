@@ -28,6 +28,7 @@ public class Auto_First_Attempt extends OpMode {
     }
 
     public void start() {
+    drive(5);
     }
 
     public void loop() {
