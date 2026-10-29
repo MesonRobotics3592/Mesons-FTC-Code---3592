@@ -36,6 +36,7 @@ public class TeleOp_Test extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
+        telemetry.addData("Launcher State: ", launcherState);
     }
 
     @Override
@@ -65,10 +66,14 @@ public class TeleOp_Test extends OpMode {
         front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherTick();
         intakeTick();
 
@@ -88,6 +93,8 @@ public class TeleOp_Test extends OpMode {
                 }
             }
         }
+        //telemetry.addData("Launcher State: ", launcherState);
+        telemetry.update();
     }
     public void intakeTick() {
         if (gamepad1.left_trigger > 0.1 && intakeCheck == 0) {
