@@ -24,6 +24,8 @@ public class TeleOp_Test extends OpMode {
     private int launcherCheck = 0;
     private int intakeCheck = 0;
     private int launcherState = 0;
+    private int intakeState = 0;
+    private int gateCheck = 0;
 
 
     @Override
@@ -76,6 +78,13 @@ public class TeleOp_Test extends OpMode {
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherTick();
         intakeTick();
+        stopBalls();
+        telemetry.addData("Launcher State: ", launcherState);
+        telemetry.addData("Launcher Check", launcherCheck);
+        telemetry.addData("Intake State: ", intakeState);
+        telemetry.addData("Intake Check", intakeCheck);
+        telemetry.addData("Stopper position", gate.getPosition());
+        telemetry.update();
 
     }
 
@@ -93,16 +102,34 @@ public class TeleOp_Test extends OpMode {
                 }
             }
         }
-        //telemetry.addData("Launcher State: ", launcherState);
-        telemetry.update();
+
     }
     public void intakeTick() {
-        if (gamepad1.left_trigger > 0.1 && intakeCheck == 0) {
-            intakeCheck = 1;
-            intake.setPower(1);
-        } else if (gamepad1.left_trigger > 0.1 && intakeCheck == 1) {
-            intakeCheck = 0;
-            intake.setPower(0);
+        if (gamepad1.left_trigger_pressed) {
+            if (intakeCheck == 0) {
+                if (intakeState == 0) {
+                    intake.setPower(.75);
+                    intakeState = 1;
+                } else if (intakeState == 1) {
+                    intake.setPower(0);
+                    intakeState = 0;
+                } else {
+                    intakeCheck = 0;
+                }
+            }
         }
+
     }
-}
+    public void stopBalls() {
+        if (gamepad1.aWasPressed()) {
+            if (gateCheck == 0) {
+                gate.setPosition(-.6);
+                gateCheck = 1;
+                } else {
+                gate.setPosition(0);
+                gateCheck = 0;
+                }
+            }
+        }
+
+    }
