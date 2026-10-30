@@ -47,6 +47,10 @@ public class TeleOp_Test extends OpMode {
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
         telemetry.addData("Launcher State: ", launcherState);
+        telemetry.addData("Launcher Check", launcherCheck);
+        telemetry.addData("Intake State: ", intakeState);
+        telemetry.addData("Intake Check", intakeCheck);
+        telemetry.addData("Stopper position", gate.getPosition());
         gate.setPosition(gateStartPos);
     }
 
@@ -112,9 +116,6 @@ public class TeleOp_Test extends OpMode {
                 }
             }
         }
-
-        telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Launcher Check", launcherCheck);
     }
     public void intakeTick() {
         if (gamepad1.left_trigger_pressed) {
@@ -131,8 +132,6 @@ public class TeleOp_Test extends OpMode {
             }
         }
 
-        telemetry.addData("Intake State: ", intakeState);
-        telemetry.addData("Intake Check", intakeCheck);
     }
     public void stopBalls() {
         if (gamepad1.aWasPressed()) {
@@ -146,7 +145,6 @@ public class TeleOp_Test extends OpMode {
             }
         }
 
-        telemetry.addData("Stopper position", gate.getPosition());
     }
 
 }
