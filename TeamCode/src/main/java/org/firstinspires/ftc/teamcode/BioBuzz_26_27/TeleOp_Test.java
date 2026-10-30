@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.*;
 //Include @Disabled or comment out the OpMode to remove the program from the Driver Hub.
 
 public class TeleOp_Test extends OpMode {
-
+    //Motor+Servo Declarations
     private DcMotor back_right = null;
     private DcMotor front_left = null;
     private DcMotor front_right = null;
@@ -20,13 +20,21 @@ public class TeleOp_Test extends OpMode {
     private DcMotor intake = null;
     private DcMotor launcher = null;
     private Servo gate = null;
+
+    //Launcher Variables
     private double speedMod = 1;
     private int launcherCheck = 0;
-    private int intakeCheck = 0;
     private int launcherState = 0;
-    private int intakeState = 0;
-    private int gateCheck = 0;
 
+    //Intake Variables
+    private int intakeCheck = 0;
+    private int intakeState = 0;
+
+
+    //Gate Variables
+    private int gateCheck = 0;
+    private double gateStartPos = 0.4;
+    private double gateOpenPos = 0.8;
 
     @Override
 
@@ -39,11 +47,13 @@ public class TeleOp_Test extends OpMode {
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
         telemetry.addData("Launcher State: ", launcherState);
+        gate.setPosition(gateStartPos);
     }
 
     @Override
 
     public void loop() {
+        //Driving
         double drive = -1 * gamepad1.left_stick_y;
         double strafe = gamepad1.right_stick_x;
         double twist = gamepad1.left_stick_x;
@@ -60,6 +70,8 @@ public class TeleOp_Test extends OpMode {
         if (max > 1) {
             for (int i = 0; i < speeds.length; i++) speeds[i] /= max;
         }
+
+        //Motors
         front_left.setPower(speeds[0]);
         front_right.setPower(speeds[1]);
         back_left.setPower(speeds[2]);
@@ -76,16 +88,14 @@ public class TeleOp_Test extends OpMode {
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Methods
         launcherTick();
         intakeTick();
         stopBalls();
-        telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Launcher Check", launcherCheck);
-        telemetry.addData("Intake State: ", intakeState);
-        telemetry.addData("Intake Check", intakeCheck);
-        telemetry.addData("Stopper position", gate.getPosition());
-        telemetry.update();
 
+        //Telemetry Update
+        telemetry.update();
     }
 
     public void launcherTick() {
@@ -103,6 +113,8 @@ public class TeleOp_Test extends OpMode {
             }
         }
 
+        telemetry.addData("Launcher State: ", launcherState);
+        telemetry.addData("Launcher Check", launcherCheck);
     }
     public void intakeTick() {
         if (gamepad1.left_trigger_pressed) {
@@ -119,17 +131,22 @@ public class TeleOp_Test extends OpMode {
             }
         }
 
+        telemetry.addData("Intake State: ", intakeState);
+        telemetry.addData("Intake Check", intakeCheck);
     }
     public void stopBalls() {
         if (gamepad1.aWasPressed()) {
             if (gateCheck == 0) {
-                gate.setPosition(-.6);
+                gate.setPosition(gateOpenPos);
                 gateCheck = 1;
-                } else {
-                gate.setPosition(0);
+            }
+            else {
+                gate.setPosition(gateStartPos);
                 gateCheck = 0;
-                }
             }
         }
 
+        telemetry.addData("Stopper position", gate.getPosition());
     }
+
+}
