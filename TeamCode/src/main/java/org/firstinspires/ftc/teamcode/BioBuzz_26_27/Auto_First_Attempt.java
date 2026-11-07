@@ -69,10 +69,10 @@ public class Auto_First_Attempt extends OpMode {
 
     public void shortInit(){
         //Variable initialization, brake functions and setting proper wheel direction for mecanum drive.
-        front_left   = hardwareMap.get(DcMotorEx.class, "front_left");
-        front_right  = hardwareMap.get(DcMotorEx.class, "front_right");
-        back_left    = hardwareMap.get(DcMotorEx.class, "back_left");
-        back_right   = hardwareMap.get(DcMotorEx.class, "back_right");
+        front_left   = hardwareMap.get(DcMotorEx.class, "lf");
+        front_right  = hardwareMap.get(DcMotorEx.class, "rf");
+        back_left    = hardwareMap.get(DcMotorEx.class, "lr");
+        back_right   = hardwareMap.get(DcMotorEx.class, "rr");
         //Encoders and basic directions; 0 power is set to brake, holding its position
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

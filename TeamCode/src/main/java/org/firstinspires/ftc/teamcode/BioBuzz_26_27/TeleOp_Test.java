@@ -41,10 +41,10 @@ public class TeleOp_Test extends OpMode {
     @Override
 
     public void init() {
-        front_left = hardwareMap.get(DcMotor.class, "front_left");
-        front_right = hardwareMap.get(DcMotor.class, "front_right");
-        back_left = hardwareMap.get(DcMotor.class, "back_left");
-        back_right = hardwareMap.get(DcMotor.class, "back_right");
+        front_left = hardwareMap.get(DcMotor.class, "lf");
+        front_right = hardwareMap.get(DcMotor.class, "rf");
+        back_left = hardwareMap.get(DcMotor.class, "lr");
+        back_right = hardwareMap.get(DcMotor.class, "rr");
         intake = hardwareMap.get(DcMotor.class, "intake");
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
