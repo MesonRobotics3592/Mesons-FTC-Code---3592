@@ -35,6 +35,9 @@ public class TeleOp_Test extends OpMode {
     private int gateCheck = 0;
     private double gateStartPos = 0.4;
     private double gateOpenPos = 0.8;
+    private int lightCheck = 0;
+    private double lightStartPos = 0.4;
+    private double lightOpenPos = 0.8;
 
     @Override
 
@@ -97,6 +100,7 @@ public class TeleOp_Test extends OpMode {
         launcherTick();
         intakeTick();
         stopBalls();
+        //lightTick();
 
         //Telemetry Update
         telemetry.update();
@@ -118,6 +122,7 @@ public class TeleOp_Test extends OpMode {
         }
     }
     public void intakeTick() {
+        telemetry.addData("I am being called", intakeCheck);
         if (gamepad1.left_trigger_pressed) {
             if (intakeCheck == 0) {
                 if (intakeState == 0) {
@@ -133,6 +138,21 @@ public class TeleOp_Test extends OpMode {
         }
 
     }
+    /*
+    public void lightTick() {
+        if (gamepad1.bWasPressed()) {
+            if (lightCheck == 0) {
+                light.setPosition(lightOpenPos);
+                lightCheck = 1;
+            }
+            else {
+                light.setPosition(lightStartPos);
+                lightCheck = 0;
+            }
+        }
+
+    }
+    */
     public void stopBalls() {
         if (gamepad1.aWasPressed()) {
             if (gateCheck == 0) {
