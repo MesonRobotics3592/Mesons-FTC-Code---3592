@@ -23,14 +23,13 @@ public class TeleOp_Test extends OpMode {
 
     //Launcher Variables
     private double speedMod = 1;
-    private int launcherCheck = 0;
-    private int launcherState = 0;
-
-    //Intake Variables
-    private int intakeCheck = 0;
-    private int intakeState = 0;
-
-
+    private boolean launcherState = false;
+    //launcher rising edge detection
+    private boolean lastLauncherState = false;
+    private boolean currLauncherState = false;
+    private boolean intakeState = false;
+    private boolean lastIntakeState = false;
+    private boolean currIntakeState = false;
     //Gate Variables
     private int gateCheck = 0;
     private double gateStartPos = 0.4;
@@ -50,9 +49,11 @@ public class TeleOp_Test extends OpMode {
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
         telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Launcher Check", launcherCheck);
-        telemetry.addData("Intake State: ", intakeState);
-        telemetry.addData("Intake Check", intakeCheck);
+        telemetry.addData("Last Launcher State", lastLauncherState);
+        telemetry.addData("Current Launcher State", currLauncherState);
+        telemetry.addData("IntakeState: ", intakeState);
+        telemetry.addData("Last Intake State", lastIntakeState);
+        telemetry.addData("Current Intake State", currIntakeState);
         telemetry.addData("Stopper position", gate.getPosition());
         gate.setPosition(gateStartPos);
     }
@@ -107,36 +108,28 @@ public class TeleOp_Test extends OpMode {
     }
 
     public void launcherTick() {
-        if (gamepad1.right_trigger_pressed) {
-            if (launcherCheck == 0) {
-                if (launcherState == 0) {
-                    launcher.setPower(1);
-                    launcherState = 1;
-                } else if (launcherState == 1) {
-                    launcher.setPower(0);
-                    launcherState = 0;
-                } else {
-                    launcherCheck = 0;
-                }
-            }
+        currLauncherState = gamepad1.right_trigger > 0.5;
+        if(currLauncherState && !lastLauncherState){
+            launcherState = !launcherState;
+        }
+        lastLauncherState = currLauncherState;
+        if(launcherState) {
+            launcher.setPower(1.0);
+        } else {
+            launcher.setPower(0.0);
         }
     }
     public void intakeTick() {
-        telemetry.addData("I am being called", intakeCheck);
-        if (gamepad1.left_trigger_pressed) {
-            if (intakeCheck == 0) {
-                if (intakeState == 0) {
-                    intake.setPower(.75);
-                    intakeState = 1;
-                } else if (intakeState == 1) {
-                    intake.setPower(0);
-                    intakeState = 0;
-                } else {
-                    intakeCheck = 0;
-                }
-            }
+        currIntakeState = gamepad1.left_trigger > 0.5;
+        if(currIntakeState && !lastIntakeState){
+            intakeState = !intakeState;
         }
-
+        lastIntakeState = currIntakeState;
+        if(intakeState) {
+            intake.setPower(1.0);
+        } else {
+            intake.setPower(0.0);
+        }
     }
     /*
     public void lightTick() {
