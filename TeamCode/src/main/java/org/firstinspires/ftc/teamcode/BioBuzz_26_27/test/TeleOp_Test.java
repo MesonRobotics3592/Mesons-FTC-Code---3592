@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.BioBuzz_26_27;
+package org.firstinspires.ftc.teamcode.BioBuzz_26_27.test;
 
 //Import all necessary libraries, we need april tag and vision portal/webcam imports later on
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.*;
 
 
 @TeleOp
-//@Disabled
+@Disabled
 //Include @Disabled or comment out the OpMode to remove the program from the Driver Hub.
 
 public class TeleOp_Test extends OpMode {
@@ -20,9 +19,9 @@ public class TeleOp_Test extends OpMode {
     private DcMotor intake = null;
     private DcMotor launcher = null;
     private Servo gate = null;
+    private double speedMod = 1;
 
     //Launcher Variables
-    private double speedMod = 1;
     private boolean launcherState = false;
     //launcher rising edge detection
     private boolean lastLauncherState = false;
@@ -30,6 +29,7 @@ public class TeleOp_Test extends OpMode {
     private boolean intakeState = false;
     private boolean lastIntakeState = false;
     private boolean currIntakeState = false;
+
     //Gate Variables
     private int gateCheck = 0;
     private double gateStartPos = 0.4;
@@ -49,12 +49,12 @@ public class TeleOp_Test extends OpMode {
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
         telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Last Launcher State", lastLauncherState);
-        telemetry.addData("Current Launcher State", currLauncherState);
-        telemetry.addData("IntakeState: ", intakeState);
-        telemetry.addData("Last Intake State", lastIntakeState);
-        telemetry.addData("Current Intake State", currIntakeState);
-        telemetry.addData("Stopper position", gate.getPosition());
+        telemetry.addData("Last Launcher State: ", lastLauncherState);
+        telemetry.addData("Current Launcher State: ", currLauncherState);
+        telemetry.addData("Intake State: ", intakeState);
+        telemetry.addData("Last Intake State: ", lastIntakeState);
+        telemetry.addData("Current Intake State: ", currIntakeState);
+        telemetry.addData("Stopper position: ", gate.getPosition());
         gate.setPosition(gateStartPos);
     }
 
@@ -101,7 +101,6 @@ public class TeleOp_Test extends OpMode {
         launcherTick();
         intakeTick();
         stopBalls();
-        //lightTick();
 
         //Telemetry Update
         telemetry.update();
@@ -131,21 +130,7 @@ public class TeleOp_Test extends OpMode {
             intake.setPower(0.0);
         }
     }
-    /*
-    public void lightTick() {
-        if (gamepad1.bWasPressed()) {
-            if (lightCheck == 0) {
-                light.setPosition(lightOpenPos);
-                lightCheck = 1;
-            }
-            else {
-                light.setPosition(lightStartPos);
-                lightCheck = 0;
-            }
-        }
 
-    }
-    */
     public void stopBalls() {
         if (gamepad1.aWasPressed()) {
             if (gateCheck == 0) {
