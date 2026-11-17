@@ -27,11 +27,6 @@ public class TeleOp_Qual1 extends OpMode {
     private boolean lastIntakeState = false;
     private boolean currIntakeState = false;
 
-    //Gate Variables
-    private int gateCheck = 0;
-    private double gateStartPos = 0.4;
-    private double gateOpenPos = 0.8;
-
     @Override
 
     public void init() {
@@ -52,7 +47,6 @@ public class TeleOp_Qual1 extends OpMode {
         telemetry.addData("Strafe position", back_left.getCurrentPosition());
         telemetry.addData("Left position", front_left.getCurrentPosition());
         telemetry.addData("Right position", back_right.getCurrentPosition());
-        gate.setPosition(gateStartPos);
         telemetry.update();
     }
 
@@ -61,13 +55,13 @@ public class TeleOp_Qual1 extends OpMode {
     public void loop() {
         //Driving
         double drive = -1 * gamepad1.left_stick_y;
-        double strafe = gamepad1.right_stick_x;
-        double twist = gamepad1.left_stick_x;
+        double strafe = -gamepad1.right_stick_x;
+        double twist = -gamepad1.left_stick_x;
         double[] speeds = {
-                -1 * (drive - strafe - twist) * speedMod,
-                -(-drive + strafe - twist) * speedMod,
-                (-drive - strafe - twist) * speedMod,
-                (drive + strafe - twist) * speedMod
+                -1 * (drive + strafe - twist) * speedMod, //Front Left
+                -(-drive + strafe - twist) * speedMod, //Front Right
+                (-drive + strafe - twist) * speedMod, //Back Left
+                (drive + strafe - twist) * speedMod //Back Right
         };
         double max = Math.abs(speeds[0]);
         for (int i = 0; i < speeds.length; i++) {
@@ -98,7 +92,6 @@ public class TeleOp_Qual1 extends OpMode {
         //Methods
         launcherTick();
         intakeTick();
-        stopBalls();
         telemetryThing();
 
     }
@@ -129,18 +122,6 @@ public class TeleOp_Qual1 extends OpMode {
         }
     }
 
-    public void stopBalls() {
-        if (gamepad1.aWasPressed()) {
-            if (gateCheck == 0) {
-                gate.setPosition(gateOpenPos);
-                gateCheck = 1;
-            }
-            else {
-                gate.setPosition(gateStartPos);
-                gateCheck = 0;
-            }
-        }
-    }
     public void telemetryThing() {
         telemetry.addData("Launcher State: ", launcherState);
         telemetry.addData("Last Launcher State: ", lastLauncherState);
