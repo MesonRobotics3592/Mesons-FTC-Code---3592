@@ -41,7 +41,7 @@ public class save_us_all extends OpMode {
     @Override
     public void start() {
         sleep(2000);
-        strafe(5);
+        strafe(25);
     }
 
     @Override
