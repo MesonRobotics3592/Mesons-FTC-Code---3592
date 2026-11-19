@@ -37,12 +37,7 @@ public class TeleOp_Qual1 extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
         launcher = hardwareMap.get(DcMotor.class, "launcher");
         gate = hardwareMap.get(Servo.class, "channel_gate");
-        telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Last Launcher State: ", lastLauncherState);
-        telemetry.addData("Current Launcher State: ", currLauncherState);
-        telemetry.addData("Intake State: ", intakeState);
-        telemetry.addData("Last Intake State: ", lastIntakeState);
-        telemetry.addData("Current Intake State: ", currIntakeState);
+
         telemetry.addData("Stopper position: ", gate.getPosition());
         telemetry.addData("Strafe position", back_left.getCurrentPosition());
         telemetry.addData("Left position", front_left.getCurrentPosition());

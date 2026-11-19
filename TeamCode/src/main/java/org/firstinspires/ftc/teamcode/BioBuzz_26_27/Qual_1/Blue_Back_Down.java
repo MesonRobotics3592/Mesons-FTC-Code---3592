@@ -114,15 +114,15 @@ public class Blue_Back_Down extends OpMode {
         int t1 = (int)(i1 - pulse);
         int t2 = (int)(i2 - pulse);
         int t3 = (int)(i3 + pulse);
-        motor0.setTargetPosition(i0 + pulse);
-        motor1.setTargetPosition(i1 - pulse);
-        motor2.setTargetPosition(i2 - pulse);
-        motor3.setTargetPosition(i3 + pulse);
+        //motor0.setTargetPosition(i0 + pulse);
+        //motor1.setTargetPosition(i1 - pulse);
+        //motor2.setTargetPosition(i2 - pulse);
+        //motor3.setTargetPosition(i3 + pulse);
         int notAbs = deg/Math.abs(deg);
-        motor0.setVelocity(1500 * notAbs);
-        motor1.setVelocity(1500 * notAbs);
-        motor2.setVelocity(1500 * notAbs);
-        motor3.setVelocity(1500 * notAbs);
+        //motor0.setVelocity(1500 * notAbs);
+        //motor1.setVelocity(1500 * notAbs);
+        //motor2.setVelocity(1500 * notAbs);
+        //motor3.setVelocity(1500 * notAbs);
         while((deg > 0) ? (i0 < t0 - tolerance || i1 > t1 + tolerance || i2 > t2 + tolerance || i3 < t3 - tolerance) : (i0 > t0 + tolerance || i1 < t1 - tolerance || i2 < t2 - tolerance || i3 > t3 + tolerance)){
             dcPos();
         }
@@ -135,15 +135,15 @@ public class Blue_Back_Down extends OpMode {
         int t1 = (int)(i1 - pulses(dist));
         int t2 = (int)(i2 + pulses(dist));
         int t3 = (int)(i3 - pulses(dist));
-        motor0.setTargetPosition(i0 + pulses(dist));
-        motor1.setTargetPosition(i1 - pulses(dist));
-        motor2.setTargetPosition(i2 + pulses(dist));
-        motor3.setTargetPosition(i3 - pulses(dist));
+        //motor0.setTargetPosition(i0 + pulses(dist));
+        //motor1.setTargetPosition(i1 - pulses(dist));
+        //motor2.setTargetPosition(i2 + pulses(dist));
+        //motor3.setTargetPosition(i3 - pulses(dist));
         int notAbs = dist/Math.abs(dist);
-        motor0.setVelocity(1500 * notAbs);
-        motor1.setVelocity(1500 * notAbs);
-        motor2.setVelocity(1500 * notAbs);
-        motor3.setVelocity(1500 * notAbs);
+        //motor0.setVelocity(1500 * notAbs);
+        //motor1.setVelocity(1500 * notAbs);
+        //motor2.setVelocity(1500 * notAbs);
+        //motor3.setVelocity(1500 * notAbs);
         while((dist > 0) ? (i0 < t0 - tolerance || i1 > t1 + tolerance || i2 < t2 - tolerance || i3 > t3 + tolerance) : (i0 > t0 + tolerance || i1 < t1 - tolerance || i2 > t2 + tolerance || i3 < t3 - tolerance)){
             dcPos();
         }
