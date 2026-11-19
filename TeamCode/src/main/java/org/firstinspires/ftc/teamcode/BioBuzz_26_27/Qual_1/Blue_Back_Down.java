@@ -1,101 +1,185 @@
-//----------------------------------------------------- Imports -------------------------------------------------
 package org.firstinspires.ftc.teamcode.BioBuzz_26_27.Qual_1;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
+import  org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import java.util.*;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 
 @Autonomous
 
 public class Blue_Back_Down extends OpMode {
 
-    //------------------------------------------- NullIit --------------------------------------
-    //declaring variables
-    private DcMotorEx back_right = null;
+    private Limelight3A limelight;
+
+    //Motors
     private DcMotorEx front_left = null;
     private DcMotorEx front_right = null;
+    private DcMotorEx back_right = null;
     private DcMotorEx back_left = null;
-    int pulse = 0;
-    double i0 = 0, i1 = 0, i2 = 0, i3 = 0;
-    double desiredRpm = 0;
-    double diameter = 1;
-    public int tolerance = 6;
+    private DcMotorEx intake = null;
+    private DcMotorEx launcher = null;
+    private DcMotorEx channel = null;
 
+    //Servos
+    private Servo launchTurn = null;
 
+    //Random vars
+    int lf_pos, rf_pos, rr_pos, lr_pos;// i# is the pos of the motor
+    int t0, t1, t2, t3;
+    int tolerance = 6;
+
+    @Override
     public void init() {
         shortInit();
     }
 
+    @Override
     public void start() {
-        drive(5);
+        sleep(2000);
+        strafe(25);
     }
 
-    public void loop() {
+    @Override
+    public void loop(){
         //LEAVE BLANK
     }
 
+    public void shortInit(){
+        front_left = hardwareMap.get(DcMotorEx.class, "lf");//0
+        front_right = hardwareMap.get(DcMotorEx.class, "rf");//1
+        back_right = hardwareMap.get(DcMotorEx.class, "rr");//2
+        back_left = hardwareMap.get(DcMotorEx.class, "lr");//3
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+        channel = hardwareMap.get(DcMotorEx.class, "channel");
+        launchTurn = hardwareMap.get(Servo.class, "launchServo");
 
+        front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        channel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-    public int pulses(double inches){
-        return (int)(inches / diameter * Math.PI * 384.5);
+        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        channel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        launcher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        launcher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        /*
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
+        */
+    }
+
+    public void drive(int dist){
+        dcPos();
+        t0 = lf_pos + pulses(dist);
+        t1 = rf_pos + pulses(dist);
+        t2 = rr_pos + pulses(dist);
+        t3 = lr_pos + pulses(dist);
+        front_left.setTargetPosition(t0);
+        front_right.setTargetPosition(t1);
+        back_right.setTargetPosition(t2);
+        back_left.setTargetPosition(t3);
+        int notAbs = dist/Math.abs(dist);
+        front_left.setVelocity(1500 * notAbs);
+        front_right.setVelocity(-1500 * notAbs);
+        back_right.setVelocity(1500 * notAbs);
+        back_left.setVelocity(-1500 * notAbs);
+
+        while((dist > 0) ? (lf_pos < t0 - tolerance || rf_pos < t1 - tolerance || rr_pos < t2 - tolerance || lr_pos < t3 - tolerance) : (lf_pos > t0 + tolerance || rf_pos > t1 + tolerance || rr_pos > t2 + tolerance || lr_pos > t3 + tolerance)){
+            dcPos();
+        }
+        sleep(100);
+    }
+
+    public void twist(int deg){
+        dcPos();
+        int pulse = (int)(pulses(deg)/3.7);
+        t0 = lf_pos + pulse;
+        t1 = rf_pos - pulse;
+        t2 = rr_pos - pulse;
+        t3 = lr_pos + pulse;
+        front_left.setTargetPosition(t0);
+        front_right.setTargetPosition(t1);
+        back_right.setTargetPosition(t2);
+        back_left.setTargetPosition(t3);
+        int notAbs = deg/Math.abs(deg);
+        front_left.setVelocity(1500 * notAbs);
+        front_right.setVelocity(1500 * notAbs);
+        back_right.setVelocity(1500 * notAbs);
+        back_left.setVelocity(1500 * notAbs);
+        while((deg > 0) ? (lf_pos < t0 - tolerance || rf_pos > t1 + tolerance || rr_pos > t2 + tolerance || lr_pos < t3 - tolerance) : (lf_pos > t0 + tolerance || rf_pos < t1 - tolerance || rr_pos < t2 - tolerance || lr_pos > t3 + tolerance)){
+            dcPos();
+        }
+        sleep(100);
+    }
+
+    public void strafe(int dist){
+        dcPos();
+        t0 = lf_pos + pulses(dist);
+        t1 = rf_pos - pulses(dist);
+        t2 = rr_pos + pulses(dist);
+        t3 = lr_pos - pulses(dist);
+        front_left.setTargetPosition(t0);
+        front_right.setTargetPosition(t1);
+        back_right.setTargetPosition(t2);
+        back_left.setTargetPosition(t3);
+        int notAbs = dist/Math.abs(dist);
+        front_left.setVelocity(1500 * notAbs);
+        front_right.setVelocity(1500 * notAbs);
+        back_right.setVelocity(1500 * notAbs);
+        back_left.setVelocity(1500 * notAbs);
+        while((dist > 0) ? (lf_pos < t0 - tolerance || rf_pos > t1 + tolerance || rr_pos < t2 - tolerance || lr_pos > t3 + tolerance) : (lf_pos > t0 + tolerance || rf_pos < t1 - tolerance || rr_pos > t2 + tolerance || lr_pos < t3 - tolerance)){
+            dcPos();
+        }
+        sleep(100);
+    }
+
+    public void shoot(){
+
+    }
+
+    public void intake(int dist){
+
     }
 
     public void dcPos(){
-        i0 = front_left.getCurrentPosition();
-        i1 = front_right.getCurrentPosition();
-        i2 = back_left.getCurrentPosition();
-        i3 = back_right.getCurrentPosition();
-    }
-
-    public void shortInit(){
-        //Variable initialization, brake functions and setting proper wheel direction for mecanum drive.
-        front_left   = hardwareMap.get(DcMotorEx.class, "lf");
-        front_right  = hardwareMap.get(DcMotorEx.class, "rf");
-        back_left    = hardwareMap.get(DcMotorEx.class, "lr");
-        back_right   = hardwareMap.get(DcMotorEx.class, "rr");
-        //Encoders and basic directions; 0 power is set to brake, holding its position
-        front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        back_left.setDirection(DcMotor.Direction.REVERSE);
-        front_right.setDirection(DcMotor.Direction.REVERSE);
-        front_left.setDirection(DcMotor.Direction.REVERSE);
-        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //Sets the motors from running by speed and time over to a more consistent pulse-based      //movement
-        front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    //Movement Methods
-    public void drive(double inches){
-        double i0 = 0;
-        double i1 = 0;
-        double i2 = 0;
-        double i3 = 0;
-        pulse = pulses(inches);
-        front_left.setTargetPosition(front_left.getCurrentPosition() + pulse);
-        front_left.setVelocity(desiredRpm/60 * 384.5 * inches/Math.abs(inches));
-        front_right.setTargetPosition(front_left.getCurrentPosition() + pulse);
-        front_right.setVelocity(desiredRpm/60 * 384.5 * inches/Math.abs(inches));
-        back_left.setTargetPosition(front_left.getCurrentPosition() + pulse);
-        back_left.setVelocity(desiredRpm/60 * 384.5 * inches/Math.abs(inches));
-        back_right.setTargetPosition(front_left.getCurrentPosition() + pulse);
-        back_right.setVelocity(desiredRpm/60 * 384.5 * inches/Math.abs(inches));
-        dcPos();
-        while((inches > 0) ? (front_left.getCurrentPosition() < i0 - 5 || front_right.getCurrentPosition() < i1 - 5 || back_left.getCurrentPosition() < i2 - 5 || back_right.getCurrentPosition() < i3 - 5) : (front_left.getCurrentPosition() > i0 + 5 || front_right.getCurrentPosition() > i1 + 5 || back_left.getCurrentPosition() > i2 + 5 || back_right.getCurrentPosition() > i3 + 5)){
-            dcPos();
-        }
-        sleep(50);
+        lf_pos = front_left.getCurrentPosition();
+        rf_pos = front_right.getCurrentPosition();
+        rr_pos = back_right.getCurrentPosition();
+        lr_pos = back_left.getCurrentPosition();
     }
 
     public void sleep(long time){
@@ -107,58 +191,8 @@ public class Blue_Back_Down extends OpMode {
         }
     }
 
-    public void twist(int deg){
-        dcPos();
-        int pulse = (int)(pulses(deg)/3.7);
-        int t0 = (int)(i0 + pulse);
-        int t1 = (int)(i1 - pulse);
-        int t2 = (int)(i2 - pulse);
-        int t3 = (int)(i3 + pulse);
-        //motor0.setTargetPosition(i0 + pulse);
-        //motor1.setTargetPosition(i1 - pulse);
-        //motor2.setTargetPosition(i2 - pulse);
-        //motor3.setTargetPosition(i3 + pulse);
-        int notAbs = deg/Math.abs(deg);
-        //motor0.setVelocity(1500 * notAbs);
-        //motor1.setVelocity(1500 * notAbs);
-        //motor2.setVelocity(1500 * notAbs);
-        //motor3.setVelocity(1500 * notAbs);
-        while((deg > 0) ? (i0 < t0 - tolerance || i1 > t1 + tolerance || i2 > t2 + tolerance || i3 < t3 - tolerance) : (i0 > t0 + tolerance || i1 < t1 - tolerance || i2 < t2 - tolerance || i3 > t3 + tolerance)){
-            dcPos();
-        }
-        sleep(100);
+    public static int pulses(int dist){
+        //dist in inches
+        return((int)(dist / (Math.PI *  3.8) * 384.5));
     }
-
-    public void strafe(int dist){
-        dcPos();
-        int t0 = (int)(i0 + pulses(dist));
-        int t1 = (int)(i1 - pulses(dist));
-        int t2 = (int)(i2 + pulses(dist));
-        int t3 = (int)(i3 - pulses(dist));
-        //motor0.setTargetPosition(i0 + pulses(dist));
-        //motor1.setTargetPosition(i1 - pulses(dist));
-        //motor2.setTargetPosition(i2 + pulses(dist));
-        //motor3.setTargetPosition(i3 - pulses(dist));
-        int notAbs = dist/Math.abs(dist);
-        //motor0.setVelocity(1500 * notAbs);
-        //motor1.setVelocity(1500 * notAbs);
-        //motor2.setVelocity(1500 * notAbs);
-        //motor3.setVelocity(1500 * notAbs);
-        while((dist > 0) ? (i0 < t0 - tolerance || i1 > t1 + tolerance || i2 < t2 - tolerance || i3 > t3 + tolerance) : (i0 > t0 + tolerance || i1 < t1 - tolerance || i2 > t2 + tolerance || i3 < t3 - tolerance)){
-            dcPos();
-        }
-        sleep(100);
-    }
-
-    /*
-    public void shoot(){
-        kicker.setPosition(0.245);
-        sleep(300);
-        indexer.setTargetPosition(indexer.getCurrentPosition() - 769);
-        indexer.setVelocity(1500);
-        sleep(800);
-        kicker.setPosition(0.4);
-    }
-    */
-
 }
