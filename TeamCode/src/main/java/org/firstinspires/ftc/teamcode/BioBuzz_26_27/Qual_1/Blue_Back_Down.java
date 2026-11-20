@@ -44,8 +44,7 @@ public class Blue_Back_Down extends OpMode {
 
     @Override
     public void start() {
-        sleep(2000);
-        strafe(25);
+        drive(10);
     }
 
     @Override

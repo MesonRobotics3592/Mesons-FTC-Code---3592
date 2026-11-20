@@ -12,17 +12,26 @@ public class TeleOp_Qual1 extends OpMode {
     private DcMotor front_right = null;
     private DcMotor back_left = null;
     private DcMotor intake = null;
-    private DcMotor launcher = null;
-
-    private Servo gate = null;
+    private DcMotor pollenLauncher = null;
+    private DcMotor channel = null;
 
     private double speedMod = 1;
 
-    //Launcher Variables
-    private boolean launcherState = false;
-    //launcher rising edge detection
-    private boolean lastLauncherState = false;
-    private boolean currLauncherState = false;
+    //Pollen Launcher Variables
+    private Servo pollenStopper = null;
+    private Servo pollenLauncherVert = null;
+    private Servo pollenLauncherHoriz = null;
+    private boolean pollenLauncherState = false;
+    private boolean lastPollenLauncherState = false;
+    private boolean currPollenLauncherState = false;
+    private double pollenLauncherPower = 0.5;
+
+    //Channel Variables
+    private boolean channelState = false;
+    private boolean lastChannelState = false;
+    private boolean currChannelState = false;
+
+    //Intake Variables
     private boolean intakeState = false;
     private boolean lastIntakeState = false;
     private boolean currIntakeState = false;
@@ -35,10 +44,11 @@ public class TeleOp_Qual1 extends OpMode {
         back_left = hardwareMap.get(DcMotor.class, "lr");
         back_right = hardwareMap.get(DcMotor.class, "rr");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        launcher = hardwareMap.get(DcMotor.class, "launcher");
-        gate = hardwareMap.get(Servo.class, "channel_gate");
+        //channel = hardwareMap.get(DcMotor.class, "channel");
+        pollenLauncher = hardwareMap.get(DcMotor.class, "launcher");
+        //gate = hardwareMap.get(Servo.class, "channel_gate");
 
-        telemetry.addData("Stopper position: ", gate.getPosition());
+        telemetry.addData("Stopper position: ", pollenStopper.getPosition());
         telemetry.addData("Strafe position", back_left.getCurrentPosition());
         telemetry.addData("Left position", front_left.getCurrentPosition());
         telemetry.addData("Right position", back_right.getCurrentPosition());
@@ -76,13 +86,13 @@ public class TeleOp_Qual1 extends OpMode {
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pollenLauncher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pollenLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //Methods
         launcherTick();
@@ -92,18 +102,31 @@ public class TeleOp_Qual1 extends OpMode {
     }
 
     public void launcherTick() {
-        currLauncherState = gamepad1.right_trigger > 0.5;
-        if(currLauncherState && !lastLauncherState){
-            launcherState = !launcherState;
+        currPollenLauncherState = gamepad1.right_trigger > 0.5;
+        if(currPollenLauncherState && !lastPollenLauncherState){
+            pollenLauncherState = !pollenLauncherState;
         }
-        lastLauncherState = currLauncherState;
-        if(launcherState) {
-            launcher.setPower(1.0);
+        lastPollenLauncherState = currPollenLauncherState;
+        if(pollenLauncherState) {
+            pollenLauncher.setPower(pollenLauncherPower);
         } else {
-            launcher.setPower(0.0);
+            pollenLauncher.setPower(0.0);
         }
     }
 
+    /*public void channelTick(){
+        currChannelState = gamepad1.aWasPressed();
+        if(currChannelState && !lastChannelState){
+            channelState = !channelState
+        }
+        lastChannelState = currChannelState;
+        if(channelState) {
+            channel.setPower(1.0);
+        } else {
+            channel.setPower(0.0);
+        }
+    }
+    */
     public void intakeTick() {
         currIntakeState = gamepad1.left_trigger > 0.5;
         if(currIntakeState && !lastIntakeState){
@@ -115,19 +138,35 @@ public class TeleOp_Qual1 extends OpMode {
         } else {
             intake.setPower(0.0);
         }
+
     }
 
+    /*
+    public void stopBalls() {
+        if (gamepad1.aWasPressed()) {
+            if (gateCheck == 0) {
+                gate.setPosition(gateOpenPos);
+                gateCheck = 1;
+            }
+            else {
+                gate.setPosition(gateStartPos);
+                gateCheck = 0;
+            }
+        }
+
+    }
+     */
+
     public void telemetryThing() {
-        telemetry.addData("Launcher State: ", launcherState);
-        telemetry.addData("Last Launcher State: ", lastLauncherState);
-        telemetry.addData("Current Launcher State: ", currLauncherState);
+        telemetry.addData("Launcher State: ", pollenLauncherState);
+        telemetry.addData("Last Launcher State: ", lastPollenLauncherState);
+        telemetry.addData("Current Launcher State: ", currPollenLauncherState);
         telemetry.addData("Intake State: ", intakeState);
         telemetry.addData("Last Intake State: ", lastIntakeState);
         telemetry.addData("Current Intake State: ", currIntakeState);
-        telemetry.addData("Stopper position: ", gate.getPosition());
-        telemetry.addData("Strafe position", back_left.getCurrentPosition());
-        telemetry.addData("Left position", front_left.getCurrentPosition());
-        telemetry.addData("Right position", back_right.getCurrentPosition());
+        //telemetry.addData("Strafe position", back_left.getCurrentPosition());
+        //telemetry.addData("Left position", front_left.getCurrentPosition());
+        //telemetry.addData("Right position", back_right.getCurrentPosition());
         telemetry.update();
     }
 }
