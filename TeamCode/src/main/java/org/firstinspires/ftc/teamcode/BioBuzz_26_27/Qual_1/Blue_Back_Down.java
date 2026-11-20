@@ -26,7 +26,7 @@ public class Blue_Back_Down extends OpMode {
     private DcMotorEx back_right = null;
     private DcMotorEx back_left = null;
     private DcMotorEx intake = null;
-    private DcMotorEx launcher = null;
+    private DcMotorEx pollenLauncher = null;
     private DcMotorEx channel = null;
 
     //Servos
@@ -58,7 +58,7 @@ public class Blue_Back_Down extends OpMode {
         back_right = hardwareMap.get(DcMotorEx.class, "rr");//2
         back_left = hardwareMap.get(DcMotorEx.class, "lr");//3
         intake = hardwareMap.get(DcMotorEx.class, "intake");
-        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+        pollenLauncher = hardwareMap.get(DcMotorEx.class, "launcher");
         channel = hardwareMap.get(DcMotorEx.class, "channel");
         launchTurn = hardwareMap.get(Servo.class, "launchServo");
 
@@ -67,7 +67,7 @@ public class Blue_Back_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pollenLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         channel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -75,7 +75,7 @@ public class Blue_Back_Down extends OpMode {
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pollenLauncher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         channel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -83,7 +83,7 @@ public class Blue_Back_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        launcher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        pollenLauncher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -91,7 +91,7 @@ public class Blue_Back_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        launcher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pollenLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /*
