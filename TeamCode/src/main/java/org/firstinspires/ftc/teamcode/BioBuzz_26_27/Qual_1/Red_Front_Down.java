@@ -26,7 +26,7 @@ public class Red_Front_Down extends OpMode {
     private DcMotorEx back_right = null;
     private DcMotorEx back_left = null;
     private DcMotorEx intake = null;
-    private DcMotorEx launcher = null;
+    private DcMotorEx pollenLauncher = null;
     private DcMotorEx channel = null;
 
     //Servos
@@ -36,6 +36,8 @@ public class Red_Front_Down extends OpMode {
     int lf_pos, rf_pos, rr_pos, lr_pos;// i# is the pos of the motor
     int t0, t1, t2, t3;
     int tolerance = 6;
+    private boolean shootCheck = false;
+    private boolean channelCheck = false;
 
     @Override
     public void init() {
@@ -44,8 +46,13 @@ public class Red_Front_Down extends OpMode {
 
     @Override
     public void start() {
-        sleep(2000);
-        strafe(25);
+        sleep(10000);
+        shoot();
+        sleep(3000);
+        drive(2);
+        shoot();
+        strafe(45);
+        drive(15);
     }
 
     @Override
@@ -59,7 +66,7 @@ public class Red_Front_Down extends OpMode {
         back_right = hardwareMap.get(DcMotorEx.class, "rr");//2
         back_left = hardwareMap.get(DcMotorEx.class, "lr");//3
         intake = hardwareMap.get(DcMotorEx.class, "intake");
-        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+        pollenLauncher = hardwareMap.get(DcMotorEx.class, "launcher");
         channel = hardwareMap.get(DcMotorEx.class, "channel");
         launchTurn = hardwareMap.get(Servo.class, "launchServo");
 
@@ -68,7 +75,7 @@ public class Red_Front_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pollenLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         channel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -76,7 +83,7 @@ public class Red_Front_Down extends OpMode {
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pollenLauncher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         channel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -84,7 +91,7 @@ public class Red_Front_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        launcher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        pollenLauncher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -92,7 +99,7 @@ public class Red_Front_Down extends OpMode {
         back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        launcher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        pollenLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /*
@@ -168,7 +175,24 @@ public class Red_Front_Down extends OpMode {
     }
 
     public void shoot(){
+        if(!shootCheck) {
+            pollenLauncher.setPower(0.5);
+            sleep(1000);
+            channel.setPower(.75);
+            shootCheck = true;
+        } else {
+            pollenLauncher.setPower(0);
+            channel.setPower(0);
+            shootCheck = false;
+        }
 
+    }
+    public void channelOn(){
+        if(!channelCheck){
+            channel.setPower(.5);
+        } else {
+            channel.setPower(0);
+        }
     }
 
     public void intake(int dist){

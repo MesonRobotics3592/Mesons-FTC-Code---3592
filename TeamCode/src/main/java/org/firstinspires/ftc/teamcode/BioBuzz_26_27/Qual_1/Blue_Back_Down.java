@@ -36,6 +36,8 @@ public class Blue_Back_Down extends OpMode {
     int lf_pos, rf_pos, rr_pos, lr_pos;// i# is the pos of the motor
     int t0, t1, t2, t3;
     int tolerance = 6;
+    private boolean shootCheck = false;
+    private boolean channelCheck = false;
 
     @Override
     public void init() {
@@ -43,8 +45,15 @@ public class Blue_Back_Down extends OpMode {
     }
 
     @Override
-    public void start() {
-        drive(10);
+    public void start()
+    {
+        sleep(10000);
+        shoot();
+        sleep(3000);
+        shoot();
+        drive(2);
+        strafe(45);
+        drive(15);
     }
 
     @Override
@@ -167,7 +176,24 @@ public class Blue_Back_Down extends OpMode {
     }
 
     public void shoot(){
+        if(!shootCheck) {
+            pollenLauncher.setPower(0.5);
+            sleep(1000);
+            channel.setPower(.75);
+            shootCheck = true;
+        } else {
+            pollenLauncher.setPower(0);
+            channel.setPower(0);
+            shootCheck = false;
+        }
 
+    }
+    public void channelOn(){
+        if(!channelCheck){
+            channel.setPower(.5);
+        } else {
+            channel.setPower(0);
+        }
     }
 
     public void intake(int dist){
