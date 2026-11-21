@@ -13,7 +13,7 @@ public class TeleOp_Qual1 extends OpMode {
     private DcMotor back_left = null;
     private DcMotor intake = null;
     private DcMotor pollenLauncher = null;
-    //private DcMotor channel = null;
+    private DcMotor channel = null;
 
     private double speedMod = 1;
 
@@ -44,7 +44,7 @@ public class TeleOp_Qual1 extends OpMode {
         back_left = hardwareMap.get(DcMotor.class, "lr");
         back_right = hardwareMap.get(DcMotor.class, "rr");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        //channel = hardwareMap.get(DcMotor.class, "channel");
+        channel = hardwareMap.get(DcMotor.class, "channel");
         pollenLauncher = hardwareMap.get(DcMotor.class, "launcher");
         //gate = hardwareMap.get(Servo.class, "channel_gate");
 
@@ -98,7 +98,7 @@ public class TeleOp_Qual1 extends OpMode {
         launcherTick();
         intakeTick();
         telemetryThing();
-        //channel();
+        channelTick();
 
     }
 
@@ -115,10 +115,10 @@ public class TeleOp_Qual1 extends OpMode {
         }
     }
 
-    /*public void channelTick(){
+    public void channelTick(){
         currChannelState = gamepad1.aWasPressed();
         if(currChannelState && !lastChannelState){
-            channelState = !channelState
+            channelState = !channelState;
         }
         lastChannelState = currChannelState;
         if(channelState) {
@@ -127,7 +127,7 @@ public class TeleOp_Qual1 extends OpMode {
             channel.setPower(0.0);
         }
     }
-    */
+
     public void intakeTick() {
         currIntakeState = gamepad1.left_trigger > 0.5;
         if(currIntakeState && !lastIntakeState){
@@ -170,19 +170,4 @@ public class TeleOp_Qual1 extends OpMode {
         //telemetry.addData("Right position", back_right.getCurrentPosition());
         telemetry.update();
     }
-    /*
-    public void channel(){
-        currChannelState = gamepad1.bWasPressed();
-        if(currChannelState && !lastChannelState){
-            channelState = !channelState;
-        }
-        lastChannelState = currChannelState;
-        if(channelState) {
-            channel.setPower(1.0);
-        } else {
-            channel.setPower(0.0);
-        }
-    }
-
-     */
 }

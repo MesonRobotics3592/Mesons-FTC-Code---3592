@@ -35,6 +35,7 @@ public class Blue_Back_Down extends OpMode {
     int tolerance = 6;
     private boolean shootCheck = false;
     private boolean channelCheck = false;
+    private boolean intakeCheck = false;
 
     @Override
     public void init() {
@@ -174,14 +175,14 @@ public class Blue_Back_Down extends OpMode {
         if(!shootCheck) {
             pollenLauncher.setPower(0.5);
             sleep(1000);
-            channel.setPower(.75);
+            channel.setPower(1);
             shootCheck = true;
+            sleep(3000);
         } else {
             pollenLauncher.setPower(0);
             channel.setPower(0);
             shootCheck = false;
         }
-
     }
     public void channelOn(){
         if(!channelCheck){
@@ -192,7 +193,14 @@ public class Blue_Back_Down extends OpMode {
     }
 
     public void intake(int dist){
-
+        if(!intakeCheck) {
+            intake.setPower(1);
+            sleep(1000);
+            intakeCheck = true;
+        } else {
+            intake.setPower(0);
+            intakeCheck = false;
+        }
     }
 
     public void dcPos(){
