@@ -13,14 +13,14 @@ public class TeleOp_Qual1 extends OpMode {
     private DcMotor back_left = null;
     private DcMotor intake = null;
     private DcMotor pollenLauncher = null;
-    private DcMotor channel = null;
+    //private DcMotor channel = null;
 
     private double speedMod = 1;
 
     //Pollen Launcher Variables
-    private Servo pollenStopper = null;
-    private Servo pollenLauncherVert = null;
-    private Servo pollenLauncherHoriz = null;
+    //private Servo pollenStopper = null;
+    //private Servo pollenLauncherVert = null;
+    //private Servo pollenLauncherHoriz = null;
     private boolean pollenLauncherState = false;
     private boolean lastPollenLauncherState = false;
     private boolean currPollenLauncherState = false;
@@ -48,7 +48,7 @@ public class TeleOp_Qual1 extends OpMode {
         pollenLauncher = hardwareMap.get(DcMotor.class, "launcher");
         //gate = hardwareMap.get(Servo.class, "channel_gate");
 
-        telemetry.addData("Stopper position: ", pollenStopper.getPosition());
+        //telemetry.addData("Stopper position: ", pollenStopper.getPosition());
         telemetry.addData("Strafe position", back_left.getCurrentPosition());
         telemetry.addData("Left position", front_left.getCurrentPosition());
         telemetry.addData("Right position", back_right.getCurrentPosition());
@@ -98,7 +98,7 @@ public class TeleOp_Qual1 extends OpMode {
         launcherTick();
         intakeTick();
         telemetryThing();
-        channel();
+        //channel();
 
     }
 
@@ -170,6 +170,7 @@ public class TeleOp_Qual1 extends OpMode {
         //telemetry.addData("Right position", back_right.getCurrentPosition());
         telemetry.update();
     }
+    /*
     public void channel(){
         currChannelState = gamepad1.bWasPressed();
         if(currChannelState && !lastChannelState){
@@ -182,4 +183,6 @@ public class TeleOp_Qual1 extends OpMode {
             channel.setPower(0.0);
         }
     }
+
+     */
 }

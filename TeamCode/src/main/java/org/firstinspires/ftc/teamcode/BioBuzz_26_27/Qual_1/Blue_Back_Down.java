@@ -29,9 +29,6 @@ public class Blue_Back_Down extends OpMode {
     private DcMotorEx pollenLauncher = null;
     private DcMotorEx channel = null;
 
-    //Servos
-    private Servo launchTurn = null;
-
     //Random vars
     int lf_pos, rf_pos, rr_pos, lr_pos;// i# is the pos of the motor
     int t0, t1, t2, t3;
@@ -45,8 +42,7 @@ public class Blue_Back_Down extends OpMode {
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         sleep(10000);
         shoot();
         sleep(3000);
@@ -69,7 +65,6 @@ public class Blue_Back_Down extends OpMode {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         pollenLauncher = hardwareMap.get(DcMotorEx.class, "launcher");
         channel = hardwareMap.get(DcMotorEx.class, "channel");
-        launchTurn = hardwareMap.get(Servo.class, "launchServo");
 
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -112,10 +107,10 @@ public class Blue_Back_Down extends OpMode {
 
     public void drive(int dist){
         dcPos();
-        t0 = lf_pos + pulses(dist);
+        t0 = lf_pos - pulses(dist);
         t1 = rf_pos + pulses(dist);
         t2 = rr_pos + pulses(dist);
-        t3 = lr_pos + pulses(dist);
+        t3 = lr_pos - pulses(dist);
         front_left.setTargetPosition(t0);
         front_right.setTargetPosition(t1);
         back_right.setTargetPosition(t2);
@@ -135,10 +130,10 @@ public class Blue_Back_Down extends OpMode {
     public void twist(int deg){
         dcPos();
         int pulse = (int)(pulses(deg)/3.7);
-        t0 = lf_pos + pulse;
+        t0 = lf_pos - pulse;
         t1 = rf_pos - pulse;
         t2 = rr_pos - pulse;
-        t3 = lr_pos + pulse;
+        t3 = lr_pos - pulse;
         front_left.setTargetPosition(t0);
         front_right.setTargetPosition(t1);
         back_right.setTargetPosition(t2);
@@ -156,10 +151,10 @@ public class Blue_Back_Down extends OpMode {
 
     public void strafe(int dist){
         dcPos();
-        t0 = lf_pos + pulses(dist);
+        t0 = lf_pos - pulses(dist);
         t1 = rf_pos - pulses(dist);
         t2 = rr_pos + pulses(dist);
-        t3 = lr_pos - pulses(dist);
+        t3 = lr_pos + pulses(dist);
         front_left.setTargetPosition(t0);
         front_right.setTargetPosition(t1);
         back_right.setTargetPosition(t2);

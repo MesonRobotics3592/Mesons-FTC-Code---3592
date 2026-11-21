@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous
+@Disabled
 
 public class Auto_First_Attempt extends OpMode {
 

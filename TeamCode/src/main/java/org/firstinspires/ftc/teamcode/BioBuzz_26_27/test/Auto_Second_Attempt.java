@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.BioBuzz_26_27.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,6 +16,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 
 @Autonomous
+@Disabled
 
 public class Auto_Second_Attempt extends OpMode {
 
@@ -27,10 +29,7 @@ public class Auto_Second_Attempt extends OpMode {
     private DcMotorEx back_left = null;
     private DcMotorEx intake = null;
     private DcMotorEx pollenLauncher = null;
-    //private DcMotorEx channel = null;
-
-    //Servos
-    //private Servo launchTurn = null;
+    private DcMotorEx channel = null;
 
     //Random vars
     int lf_pos, rf_pos, rr_pos, lr_pos;// i# is the pos of the motor
@@ -46,8 +45,7 @@ public class Auto_Second_Attempt extends OpMode {
 
     @Override
     public void start() {
-        drive(10);
-
+        twist(45);
     }
 
     @Override
@@ -62,8 +60,7 @@ public class Auto_Second_Attempt extends OpMode {
         back_left = hardwareMap.get(DcMotorEx.class, "lr");//3
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         pollenLauncher = hardwareMap.get(DcMotorEx.class, "launcher");
-        //channel = hardwareMap.get(DcMotorEx.class, "channel");
-        //launchTurn = hardwareMap.get(Servo.class, "launchServo");
+        channel = hardwareMap.get(DcMotorEx.class, "channel");
 
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -71,7 +68,7 @@ public class Auto_Second_Attempt extends OpMode {
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pollenLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //channel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        channel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -79,7 +76,7 @@ public class Auto_Second_Attempt extends OpMode {
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         pollenLauncher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //channel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        channel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -87,7 +84,7 @@ public class Auto_Second_Attempt extends OpMode {
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         pollenLauncher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -95,7 +92,7 @@ public class Auto_Second_Attempt extends OpMode {
         back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         pollenLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -129,10 +126,10 @@ public class Auto_Second_Attempt extends OpMode {
     public void twist(int deg){
         dcPos();
         int pulse = (int)(pulses(deg)/3.7);
-        t0 = lf_pos + pulse;
+        t0 = lf_pos - pulse;
         t1 = rf_pos - pulse;
         t2 = rr_pos - pulse;
-        t3 = lr_pos + pulse;
+        t3 = lr_pos - pulse;
         front_left.setTargetPosition(t0);
         front_right.setTargetPosition(t1);
         back_right.setTargetPosition(t2);
@@ -150,10 +147,10 @@ public class Auto_Second_Attempt extends OpMode {
 
     public void strafe(int dist){
         dcPos();
-        t0 = lf_pos + pulses(dist);
+        t0 = lf_pos - pulses(dist);
         t1 = rf_pos - pulses(dist);
         t2 = rr_pos + pulses(dist);
-        t3 = lr_pos - pulses(dist);
+        t3 = lr_pos + pulses(dist);
         front_left.setTargetPosition(t0);
         front_right.setTargetPosition(t1);
         back_right.setTargetPosition(t2);
@@ -169,7 +166,7 @@ public class Auto_Second_Attempt extends OpMode {
         sleep(100);
     }
 
-    /*public void shoot(){
+    public void shoot(){
         if(!shootCheck) {
             pollenLauncher.setPower(0.5);
             sleep(1000);
@@ -189,7 +186,7 @@ public class Auto_Second_Attempt extends OpMode {
             channel.setPower(0);
         }
     }
-*/
+
     public void intake(int dist){
 
     }
