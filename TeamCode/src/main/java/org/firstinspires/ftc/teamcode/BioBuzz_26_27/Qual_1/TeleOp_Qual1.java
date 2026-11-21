@@ -98,6 +98,7 @@ public class TeleOp_Qual1 extends OpMode {
         launcherTick();
         intakeTick();
         telemetryThing();
+        channel();
 
     }
 
@@ -136,7 +137,7 @@ public class TeleOp_Qual1 extends OpMode {
         if(intakeState) {
             intake.setPower(1.0);
         } else {
-            intake.setPower(0.0);
+            intake.setPower(-1.0);
         }
 
     }
@@ -168,5 +169,17 @@ public class TeleOp_Qual1 extends OpMode {
         //telemetry.addData("Left position", front_left.getCurrentPosition());
         //telemetry.addData("Right position", back_right.getCurrentPosition());
         telemetry.update();
+    }
+    public void channel(){
+        currChannelState = gamepad1.bWasPressed();
+        if(currChannelState && !lastChannelState){
+            channelState = !channelState;
+        }
+        lastChannelState = currChannelState;
+        if(channelState) {
+            channel.setPower(1.0);
+        } else {
+            channel.setPower(0.0);
+        }
     }
 }
