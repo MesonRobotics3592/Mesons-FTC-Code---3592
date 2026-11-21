@@ -175,7 +175,7 @@ public class Red_Back_Up extends OpMode {
         if(!shootCheck) {
             pollenLauncher.setPower(0.5);
             sleep(1000);
-            channel.setPower(1);
+            channel.setPower(-1);
             shootCheck = true;
             sleep(3000);
         } else {
@@ -186,7 +186,7 @@ public class Red_Back_Up extends OpMode {
     }
     public void channelOn(){
         if(!channelCheck){
-            channel.setPower(.5);
+            channel.setPower(-1);
         } else {
             channel.setPower(0);
         }

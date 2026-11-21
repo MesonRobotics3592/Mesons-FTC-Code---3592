@@ -122,7 +122,7 @@ public class TeleOp_Qual1 extends OpMode {
         }
         lastChannelState = currChannelState;
         if(channelState) {
-            channel.setPower(1.0);
+            channel.setPower(-1.0);
         } else {
             channel.setPower(0.0);
         }
