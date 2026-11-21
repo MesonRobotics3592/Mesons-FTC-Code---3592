@@ -48,7 +48,7 @@ public class Blue_Back_Down extends OpMode {
         shoot();
         sleep(3000);
         shoot();
-        drive(2);
+        drive(5);
         strafe(45);
         drive(15);
     }
@@ -175,12 +175,14 @@ public class Blue_Back_Down extends OpMode {
         if(!shootCheck) {
             pollenLauncher.setPower(0.5);
             sleep(1000);
+            intake.setPower(1);
             channel.setPower(-1);
             shootCheck = true;
             sleep(3000);
         } else {
             pollenLauncher.setPower(0);
             channel.setPower(0);
+            intake.setPower(0);
             shootCheck = false;
         }
     }

@@ -47,8 +47,8 @@ public class Red_Front_Down extends OpMode {
         sleep(10000);
         shoot();
         sleep(3000);
-        drive(2);
         shoot();
+        drive(5);
         strafe(45);
         drive(15);
     }
@@ -176,11 +176,13 @@ public class Red_Front_Down extends OpMode {
             pollenLauncher.setPower(0.5);
             sleep(1000);
             channel.setPower(-1);
+            intake.setPower(1);
             shootCheck = true;
             sleep(3000);
         } else {
             pollenLauncher.setPower(0);
             channel.setPower(0);
+            intake.setPower(0);
             shootCheck = false;
         }
     }

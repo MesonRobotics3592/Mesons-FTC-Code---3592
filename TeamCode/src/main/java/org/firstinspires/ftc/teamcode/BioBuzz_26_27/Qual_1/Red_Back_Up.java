@@ -176,11 +176,13 @@ public class Red_Back_Up extends OpMode {
             pollenLauncher.setPower(0.5);
             sleep(1000);
             channel.setPower(-1);
+            intake.setPower(1);
             shootCheck = true;
             sleep(3000);
         } else {
             pollenLauncher.setPower(0);
             channel.setPower(0);
+            intake.setPower(0);
             shootCheck = false;
         }
     }
