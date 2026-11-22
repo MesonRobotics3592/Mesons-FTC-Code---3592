@@ -24,7 +24,7 @@ public class TeleOp_Qual1 extends OpMode {
     private boolean pollenLauncherState = false;
     private boolean lastPollenLauncherState = false;
     private boolean currPollenLauncherState = false;
-    private double pollenLauncherPower = 0.5;
+    private double pollenLauncherPower = 0.48;
 
     //Channel Variables
     private boolean channelState = false;
@@ -45,7 +45,7 @@ public class TeleOp_Qual1 extends OpMode {
         back_right = hardwareMap.get(DcMotor.class, "rr");
         intake = hardwareMap.get(DcMotor.class, "intake");
         channel = hardwareMap.get(DcMotor.class, "channel");
-        pollenLauncher = hardwareMap.get(DcMotor.class, "launcher");
+        pollenLauncher = hardwareMap.get(DcMotor.class, "pollenLauncher");
         //gate = hardwareMap.get(Servo.class, "channel_gate");
 
         //telemetry.addData("Stopper position: ", pollenStopper.getPosition());
@@ -63,8 +63,8 @@ public class TeleOp_Qual1 extends OpMode {
         double strafe = -gamepad1.right_stick_x;
         double twist = -gamepad1.left_stick_x;
         double[] speeds = {
-                -1 * (drive + strafe - twist) * speedMod, //Front Left
-                -(-drive + strafe - twist) * speedMod, //Front Right
+                -1 * (drive - strafe - twist) * speedMod, //Front Left
+                -(-drive - strafe - twist) * speedMod, //Front Right
                 (-drive + strafe - twist) * speedMod, //Back Left
                 (drive + strafe - twist) * speedMod //Back Right
         };

@@ -46,7 +46,6 @@ public class Blue_Front_Up extends OpMode {
     public void start() {
         shoot();
         sleep(3000);
-        shoot();
         drive(5);
         strafe(-45);
         drive(85);
@@ -64,7 +63,7 @@ public class Blue_Front_Up extends OpMode {
         back_right = hardwareMap.get(DcMotorEx.class, "rr");//2
         back_left = hardwareMap.get(DcMotorEx.class, "lr");//3
         intake = hardwareMap.get(DcMotorEx.class, "intake");
-        pollenLauncher = hardwareMap.get(DcMotorEx.class, "launcher");
+        pollenLauncher = hardwareMap.get(DcMotorEx.class, "pollenLauncher");
         channel = hardwareMap.get(DcMotorEx.class, "channel");
 
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -91,13 +90,15 @@ public class Blue_Front_Up extends OpMode {
         pollenLauncher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         channel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        front_left.setTargetPosition(front_left.getCurrentPosition());
+        front_right.setTargetPosition(front_right.getCurrentPosition());
+        back_right.setTargetPosition(back_right.getCurrentPosition());
+        back_left.setTargetPosition(back_left.getCurrentPosition());
+
         front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        pollenLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        channel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -172,19 +173,11 @@ public class Blue_Front_Up extends OpMode {
     }
 
     public void shoot(){
-        if(!shootCheck) {
-            pollenLauncher.setPower(0.5);
-            sleep(1000);
-            intake.setPower(1);
-            channel.setPower(-1);
-            shootCheck = true;
-            sleep(3000);
-        } else {
-            pollenLauncher.setPower(0);
-            channel.setPower(0);
-            intake.setPower(0);
-            shootCheck = false;
-        }
+        pollenLauncher.setVelocity(1500);
+        sleep(1000);
+        intake.setVelocity(-5000);
+        channel.setVelocity(-5000);
+        sleep(3000);
     }
     public void channelOn(){
         if(!channelCheck){
